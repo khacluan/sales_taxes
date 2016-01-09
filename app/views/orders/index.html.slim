@@ -45,7 +45,6 @@
             strong Total
           td
             span[style='padding-right: 5px'] Tax:
-            - tax_price = order.products.map(&:tax_price).reject(&:nil?).sum
-            = number_to_currency tax_price
+            = number_to_currency order.tax_price
             span[style='margin-left: 20px; padding-right: 5px;'] Total:
-            = number_to_currency(order.order_products.sum(:price))
+            = number_to_currency(order.total)
