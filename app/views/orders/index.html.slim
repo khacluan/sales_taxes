@@ -1,0 +1,51 @@
+.container
+  h2 INPUT
+  - @orders.each.with_index(1) do |order, index|
+    h4
+      = "Input #{index}"
+    table.table.table-striped
+      thead
+        tr
+          th[style='width: 300px;'] Name
+          th[style='width: 150px;'] Quantity
+          th Price (no tax)
+      tbody
+        - order.order_products.each.with_index(1) do |order_product, index|
+          tr
+            td
+              = order_product.product.name
+            td
+              = order_product.quantity
+            td
+              = number_to_currency(order_product.product.price)
+  br
+  br
+  h2 OUTPUT
+  - @orders.each.with_index(1) do |order, index|
+    h4
+      = "Output #{index}"
+    table.table.table-striped
+      thead
+        tr
+          th[style='width: 300px;'] Name
+          th[style='width: 150px;'] Quantity
+          th Price (applied tax)
+      tbody
+        - order.order_products.each.with_index(1) do |order_product, index|
+          tr
+            td
+              = order_product.product.name
+            td
+              = order_product.quantity
+            td
+              = number_to_currency(order_product.price)
+        tr
+          td
+          td
+            strong Total
+          td
+            span[style='padding-right: 5px'] Tax:
+            - tax_price = order.products.map(&:tax_price).reject(&:nil?).sum
+            = number_to_currency tax_price
+            span[style='margin-left: 20px; padding-right: 5px;'] Total:
+            = number_to_currency(order.order_products.sum(:price))
